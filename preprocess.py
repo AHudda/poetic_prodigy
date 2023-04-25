@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import re
 
 def get_data(file_name):
     """
@@ -13,6 +14,7 @@ def get_data(file_name):
     with open(file_name, "r") as file:
         # file = file.lower()
         for line in file:
+            line = re.sub("[^\w\s]", "", line)
             tokens = line.split()
             train.extend(tokens) #no argument also means white space
             #will feed elements of list into list ur sending
