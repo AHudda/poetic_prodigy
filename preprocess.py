@@ -1,11 +1,15 @@
 import tensorflow as tf
 import numpy as np
 import re
+import pandas as pd
 
 def get_data(file_name):
     """
     Helpful documentation
     """
+    dataframe = pd.read_csv("data/PoetryFoundationData.csv")
+    dataframe["Poem"].to_csv('data/Poetry.txt', sep="\n", index=False, header=False)
+
     train = []
     vocab = {}
     vocab_size = 0
@@ -27,4 +31,4 @@ def get_data(file_name):
     train = list(map(lambda x: vocab[x], train))
     # print(train)
     return train, vocab
-get_data("data/PoetryFoundationData.txt")
+get_data("data/Poetry.txt")
