@@ -36,7 +36,8 @@ def train(train_data, vocab_dict):
 
         #calculate and apply discriminator gradients, get the real loss too
         with tf.GradientTape() as tape:
-            x_real = batch
+            print("batch", batch)
+            x_real = generator(batch)
             x_fake = gumbel_softmax(generator(batch)) #(batch size, window size, vocab size)
             d_fake = discriminator(x_fake)
             d_real = discriminator(x_real)
