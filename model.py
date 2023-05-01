@@ -1,25 +1,28 @@
 import tensorflow as tf
+from gumbel import GumbelSoftmax
 import tensorflow_probability as tfp
 
 
 def get_gen_model(batch_sz, encoding_dimension, hidden_unit, optimizer):
     model = tf.keras.Sequential([
-        tf.keras.layers.Embedding(input_dim = encoding_dimension[0], output_dim = encoding_dimension[1], input_shape=(None,)),
-                                # batch_input_shape = [batch_sz, None, ]),
-        tf.keras.layers.LSTM(units = hidden_unit, return_sequences=True, recurrent_initializer='glorot_uniform')       
+        tf.keras.layers.Embedding(input_dim = encoding_dimension[0], output_dim = encoding_dimension[1]), #, input_shape=(None,)
+        tf.keras.layers.LSTM(units = hidden_unit, return_sequences=False, recurrent_initializer='glorot_uniform', activation = 'sigmoid')       
     ])
     
-    model.compile(optimizer=optimizer, loss=g_loss)#, optimizer = optimizer)
+    model.compile(optimizer=optimizer, loss=g_loss)
 
     return model
 
 
 # takes in the LSTM output with shape (batch size, window size, vocab size)
 def gumbel_softmax(input): 
-    # input = tf.reshape(input, [input.shape[0], 1, input.shape[1]])
     print('in gumbel')
-    return GumbelSoftmax(input) # temp is a hyperparameter, used to be 1.0
-    #return tfp.distribution.RelaxedOneHOtCategorical(1, input)
+    x = tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
+    print('this is the output of gumbel_softmax: ', x.sample())
+    return x
+
+    # GumbelSoftmax(input)
+    #tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
 
 
 def get_disc_model(units, optimizer):
@@ -32,7 +35,10 @@ def get_disc_model(units, optimizer):
         tf.keras.layers.BatchNormalization(),
         tf.keras.layers.Dense(units = 1, activation = 'sigmoid')
     ])
-    model.compile(loss = d_loss, optimizer = optimizer)
+    model.compile(optimizer = optimizer, loss = d_loss)
+    print('returned model')
+    
+    return model
 
 # logits_real: Tensor, shape [batch_size, 1], output of discriminator for each real image
 # logits_fake: Tensor, shape[batch_size, 1], output of discriminator for each fake image

@@ -26,8 +26,9 @@ def train(train_data, vocab_dict):
             #x_real = batch
             batch = batch.reshape((30, 1))
             x_fake = gumbel_softmax(generator(batch)) #(batch size, window size, vocab size)
-            print("shape", x_fake.shape)
+            print("gumbel executed")
             d_fake = discriminator(x_fake)
+            print("discriminator ran")
             #d_real = discriminator(x_real)
             loss = g_loss(d_fake)
         grads = tape.gradient(loss, generator.trainable_variables)
@@ -37,7 +38,6 @@ def train(train_data, vocab_dict):
         with tf.GradientTape() as tape:
             x_real = batch
             x_fake = gumbel_softmax(generator(batch)) #(batch size, window size, vocab size)
-            print(x_fake.shape)
             d_fake = discriminator(x_fake)
             d_real = discriminator(x_real)
             loss = d_loss(d_fake, d_real)
