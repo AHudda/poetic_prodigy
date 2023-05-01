@@ -4,8 +4,8 @@ import numpy as np
 
 class Poet:
 
-    def __init__(self, word_dict):
-        self.word_dict = word_dict
+    def __init__(self, vocab_dict):
+        self.vocab_dict = vocab_dict
         self.embed = 128
         self.hidden_unit = 512
         self.model_path = './models/love-letter-generator-model.h5'
@@ -20,14 +20,14 @@ class Poet:
         random_sample = np.random.multinomial(self.n, gumbel_noise)
         max_prob_index = random_sample.argmax()
 
-        next_word = self.word_dict[max_prob_index]
+        next_word = self.vocab_dict[max_prob_index]
         
         return next_word
 
 
 
     def generate(self):
-        lstm_output = build_generator(batch_sz=1, encoding_dimension=[len(self.word_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
+        lstm_output = build_generator(batch_sz=1, encoding_dimension=[len(self.vocab_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
         random_distribution = gumbel_softmax(lstm_output)
         #model.load_weights()
         return random_distribution
