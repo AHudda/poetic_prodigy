@@ -15,7 +15,7 @@ def build_generator(batch_sz, encoding_dimension, hidden_unit, optimizer):
 
 # takes in the LSTM output with shape (batch size, window size, vocab size)
 def gumbel_softmax(input): 
-    return gumbel(input, 1.0) # temp is a hyperparamete
+    return gumbel(input, 1.0) # temp is a hyperparameter
 
 
 

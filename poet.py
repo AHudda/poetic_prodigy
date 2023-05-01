@@ -15,6 +15,7 @@ class Poet:
         self.n = 3 # n, for multinomial distribution (hyperparemter that represents num outcomes)
 
     def predict_next_word(self, existing_poem):
+        # gumbel + multinomial for training randomness 
         gumbel_noise = self.generate()
         random_sample = np.random.multinomial(self.n, gumbel_noise)
         max_prob_index = random_sample.argmax()
