@@ -21,30 +21,31 @@ def train(train_data, vocab_dict):
     discriminator = get_disc_model(UNITS, optimizer)
 
     for batch in batches:
-    # calculate and apply generator gradients
+        # calculate and apply generator gradients
         with tf.GradientTape() as tape:
-            #x_real = batch
             batch = batch.reshape((30, 1))
             x_fake = gumbel_softmax(generator(batch)) #(batch size, window size, vocab size)
-            print("gumbel executed")
+            print('generator value for x_fake: ', x_fake)
             d_fake = discriminator(x_fake)
-            print("discriminator ran")
-            #d_real = discriminator(x_real)
+            print("generator value for d_fake: ", d_fake)
             loss = g_loss(d_fake)
         grads = tape.gradient(loss, generator.trainable_variables)
         optimizer.apply_gradients(zip(grads, generator.trainable_variables))
+        print('finished generator loss section')
 
         #calculate and apply discriminator gradients, get the real loss too
         with tf.GradientTape() as tape:
-            print("batch", batch)
             x_real = generator(batch)
             x_fake = gumbel_softmax(generator(batch)) #(batch size, window size, vocab size)
+            print('discriminator value for x_fake: ', x_fake)
             d_fake = discriminator(x_fake)
+            print("discriminator value for d_fake: ", d_fake)
             d_real = discriminator(x_real)
             loss = d_loss(d_fake, d_real)
             total_loss += loss
         grads = tape.gradient(loss, discriminator.trainable_variables)
         optimizer.apply_gradients(zip(grads, discriminator.trainable_variables))
+        print('finished discriminator loss section')
 
 #def main (args):
 train_data, vocab_dict = get_data("data/Poetry.txt")

@@ -16,16 +16,11 @@ def get_gen_model(batch_sz, encoding_dimension, hidden_unit, optimizer):
 
 # takes in the LSTM output with shape (batch size, window size, vocab size)
 def gumbel_softmax(input): 
-    print('in gumbel')
     x = call(input, 1.0)
-    #tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
-    #print('this is the output of gumbel_softmax: ', x.sample())
-    print('output of gumbel: ', x[0])
     return x[0]
 
-    # GumbelSoftmax(input)
     #tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
-
+    #print('this is the output of gumbel_softmax: ', x.sample())
 
 def get_disc_model(units, optimizer):
     model = tf.keras.Sequential([
@@ -42,8 +37,7 @@ def get_disc_model(units, optimizer):
     
     return model
 
-# logits_real: Tensor, shape [batch_size, 1], output of discriminator for each real image
-# logits_fake: Tensor, shape[batch_size, 1], output of discriminator for each fake image
+
 cc_func = tf.keras.losses.CategoricalCrossentropy()
 
 def g_loss(d_fake:tf.Tensor) -> tf.Tensor:

@@ -1,6 +1,5 @@
 from typing import Any, Dict, Optional, Tuple
 import tensorflow as tf
-from tensorflow.keras.layers import Layer
 
 #import nalp.utils.constants as c
 
