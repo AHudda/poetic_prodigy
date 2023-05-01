@@ -1,5 +1,5 @@
 import tensorflow as tf
-from gumbel import GumbelSoftmax#import tensorflow_probability as tfp
+import tensorflow_probability as tfp
 
 
 def get_gen_model(batch_sz, encoding_dimension, hidden_unit, optimizer):
