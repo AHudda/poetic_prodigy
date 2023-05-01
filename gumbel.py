@@ -2,8 +2,9 @@ from typing import Any, Dict, Optional, Tuple
 import tensorflow as tf
 from tensorflow.keras.layers import Layer
 
-import nalp.utils.constants as c
+#import nalp.utils.constants as c
 
+EPSILON = 1e-20
 
 def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
     """Samples a tensor from a Gumbel distribution.
@@ -15,7 +16,7 @@ def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
 
     uniform_dist = tf.random.uniform(input_shape, 0, 1)
     gumbel_dist = -1 * tf.math.log(
-        -1 * tf.math.log(uniform_dist + c.EPSILON) + c.EPSILON
+        -1 * tf.math.log(uniform_dist + EPSILON) + EPSILON
     )
 
     return gumbel_dist
