@@ -22,46 +22,46 @@ def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
     return gumbel_dist
 
 
-class GumbelSoftmax(Layer):
-    """A GumbelSoftmax class is the one in charge of a Gumbel-Softmax layer implementation.
-    References:
-        E. Jang, S. Gu, B. Poole. Categorical reparameterization with gumbel-softmax.
-        Preprint arXiv:1611.01144 (2016).
-    """
+# class GumbelSoftmax(Layer):
+#     """A GumbelSoftmax class is the one in charge of a Gumbel-Softmax layer implementation.
+#     References:
+#         E. Jang, S. Gu, B. Poole. Categorical reparameterization with gumbel-softmax.
+#         Preprint arXiv:1611.01144 (2016).
+#     """
 
-    def __init__(self, axis: Optional[int] = -1, **kwargs) -> None:
-        """Initialization method.
-        Args:
-            axis: Axis to perform the softmax operation.
-        """
+#     def __init__(self, axis: Optional[int] = -1, **kwargs) -> None:
+#         """Initialization method.
+#         Args:
+#             axis: Axis to perform the softmax operation.
+#         """
 
-        super(GumbelSoftmax, self).__init__(**kwargs)
+#         super(GumbelSoftmax, self).__init__(**kwargs)
 
-        self.axis = axis
+#         self.axis = axis
 
-    def call(self, inputs: tf.Tensor, tau: float) -> Tuple[tf.Tensor, tf.Tensor]:
-        """Method that holds vital information whenever this class is called.
-        Args:
+def call(inputs: tf.Tensor, tau: float) -> Tuple[tf.Tensor, tf.Tensor]:
+    """Method that holds vital information whenever this class is called.
+         Args:
             x: A tensorflow's tensor holding input data.
             tau: Gumbel-Softmax temperature parameter.
         Returns:
             (Tuple[tf.Tensor, tf.Tensor]): Gumbel-Softmax output and its argmax token.
-        """
+    """
 
-        x = inputs + gumbel_distribution(tf.shape(inputs))
-        x = tf.nn.softmax(x / tau, self.axis)
+    x = inputs + gumbel_distribution(tf.shape(inputs))
+    x = tf.nn.softmax(x / tau, -1)
 
-        y = tf.stop_gradient(tf.argmax(x, self.axis, tf.int32))
+    y = tf.stop_gradient(tf.argmax(x, -1, tf.int32))
 
-        return x, y
+    return x, y
 
-    def get_config(self) -> Dict[str, Any]:
-        """Gets the configuration of the layer for further serialization.
-        Returns:
-            (Dict[str, Any]): Configuration dictionary.
-        """
+# def get_config(self) -> Dict[str, Any]:
+#     """Gets the configuration of the layer for further serialization.
+#         Returns:
+#             (Dict[str, Any]): Configuration dictionary.
+#         """
 
-        config = {"axis": self.axis}
-        base_config = super(GumbelSoftmax, self).get_config()
+#         config = {"axis": self.axis}
+#         base_config = super(GumbelSoftmax, self).get_config()
 
-        return dict(list(base_config.items()) + list(config.items()))
+#         return dict(list(base_config.items()) + list(config.items()))

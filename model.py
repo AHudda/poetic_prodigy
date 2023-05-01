@@ -1,5 +1,5 @@
 import tensorflow as tf
-from gumbel import GumbelSoftmax
+from gumbel import call
 import tensorflow_probability as tfp
 
 
@@ -17,9 +17,11 @@ def get_gen_model(batch_sz, encoding_dimension, hidden_unit, optimizer):
 # takes in the LSTM output with shape (batch size, window size, vocab size)
 def gumbel_softmax(input): 
     print('in gumbel')
-    x = tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
-    print('this is the output of gumbel_softmax: ', x.sample())
-    return x
+    x = call(input, 1.0)
+    #tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
+    #print('this is the output of gumbel_softmax: ', x.sample())
+    print('output of gumbel: ', x[0])
+    return x[0]
 
     # GumbelSoftmax(input)
     #tfp.distributions.RelaxedOneHotCategorical(temperature = 1, probs = input)
@@ -42,13 +44,13 @@ def get_disc_model(units, optimizer):
 
 # logits_real: Tensor, shape [batch_size, 1], output of discriminator for each real image
 # logits_fake: Tensor, shape[batch_size, 1], output of discriminator for each fake image
-scc_func = tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True)
+cc_func = tf.keras.losses.CategoricalCrossentropy()
 
 def g_loss(d_fake:tf.Tensor) -> tf.Tensor:
-    return tf.reduce_mean(scc_func(tf.ones_like(d_fake), d_fake))
+    return tf.reduce_mean(cc_func(tf.ones_like(d_fake), d_fake))
 
 def d_loss(d_fake:tf.Tensor, d_real:tf.Tensor)  -> tf.Tensor:
-    d_fake_loss = scc_func(tf.zeros_like(d_fake), d_fake)
-    d_real_loss = scc_func(tf.ones_like(d_real), d_real)
+    d_fake_loss = cc_func(tf.zeros_like(d_fake), d_fake)
+    d_real_loss = cc_func(tf.ones_like(d_real), d_real)
     return tf.reduce_mean(d_fake_loss + d_real_loss)
 
