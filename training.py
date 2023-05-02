@@ -8,7 +8,7 @@ BATCH_SIZE = 30
 HIDDEN_UNIT = 512
 UNITS = 200
 EMBED = 128
-
+#put train functoin in model
 def train(train_data, vocab_dict):
     total_g_loss = 0
     total_d_loss = 0
@@ -61,12 +61,13 @@ def train(train_data, vocab_dict):
         d_optimizer.apply_gradients(zip(grads, discriminator.trainable_variables))
         # print('finished discriminator loss section')
         #remove all print statements when you start training model for faster
-    return total_g_loss, total_d_loss, avg_gen_acc/num_batches, avg_dis_acc/num_batches
+    return total_g_loss, total_d_loss, generator, discriminator
+    #,avg_gen_acc/num_batches, avg_dis_acc/num_batches
 
 
-train_data, vocab_dict = get_data("data/Poetry.txt")
-for epoch_id in range(EPOCHS):
-    total_g, total_d, acc_g, acc_d = train(train_data, vocab_dict)
+# train_data, vocab_dict = get_data("data/Poetry.txt")
+# for epoch_id in range(EPOCHS):
+#     total_g, total_d, acc_g, acc_d = train(train_data, vocab_dict)
     # print("Training Epoch: ", epoch_id, " and Generator Loss: ", total_g, " and Discriminator Loss: ", total_d) #, "and Generator Acc: ", acc_g, " and Discriminator Acc: ", acc_d)
     #print("Training Epoch: ", epoch_id, " and Loss: ", total_loss/len(train_data))
 
