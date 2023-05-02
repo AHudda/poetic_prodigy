@@ -14,6 +14,9 @@ def get_data(file_name):
     vocab = {}
     vocab_size = 0
 
+    # ADDED IN TO SIMPLY FOR NOW
+    file_name = 'data/SmallData.txt'
+
     with open(file_name, "r") as file:
         for line in file:
             line = re.sub("[^\w\s]", "", line)
@@ -26,8 +29,7 @@ def get_data(file_name):
                     vocab_size += 1
     
     train = list(map(lambda x: vocab[x], train))
-    
     return train, vocab
 
 
-get_data("data/Poetry.txt")
+# get_data("data/Poetry.txt")
