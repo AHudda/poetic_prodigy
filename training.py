@@ -67,7 +67,7 @@ def train(train_data, vocab_dict):
 train_data, vocab_dict = get_data("data/Poetry.txt")
 for epoch_id in range(EPOCHS):
     total_g, total_d, acc_g, acc_d = train(train_data, vocab_dict)
-    print("Training Epoch: ", epoch_id, " and Generator Loss: ", total_g, " and Discriminator Loss: ", total_d) #, "and Generator Acc: ", acc_g, " and Discriminator Acc: ", acc_d)
+    # print("Training Epoch: ", epoch_id, " and Generator Loss: ", total_g, " and Discriminator Loss: ", total_d) #, "and Generator Acc: ", acc_g, " and Discriminator Acc: ", acc_d)
     #print("Training Epoch: ", epoch_id, " and Loss: ", total_loss/len(train_data))
 
 

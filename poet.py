@@ -1,4 +1,4 @@
-from model import build_generator, gumbel_softmax
+from model import get_gen_model, gumbel_softmax
 import tensorflow as tf
 import numpy as np
 
@@ -24,12 +24,11 @@ class Poet:
         
         return next_word
 
-
-
     def generate(self):
-        lstm_output = build_generator(batch_sz=1, encoding_dimension=[len(self.vocab_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
+        lstm_output = get_gen_model(batch_sz=1, encoding_dimension=[len(self.vocab_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
         random_distribution = gumbel_softmax(lstm_output)
         #model.load_weights()
+        lstm_output.save('saved_model/my_model')
         return random_distribution
 
     def create_poem(self, name, characteristic): # take in characteristic -- how would it generate words based on it
