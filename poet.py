@@ -5,7 +5,7 @@ from training import train
 from preprocess import get_data
 import re
 
-EPOCHS = 10 #change to 1 to save time?
+EPOCHS = 1 #change to 1 to save time?
 
 class Poet:
 

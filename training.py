@@ -61,7 +61,7 @@ def train(train_data, vocab_dict):
         d_optimizer.apply_gradients(zip(grads, discriminator.trainable_variables))
         # print('finished discriminator loss section')
         #remove all print statements when you start training model for faster
-    return total_g_loss, total_d_loss, generator, discriminator
+    return total_g_loss / num_batches, total_d_loss / num_batches, generator, discriminator
     #,avg_gen_acc/num_batches, avg_dis_acc/num_batches
 
 
