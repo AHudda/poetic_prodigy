@@ -62,8 +62,8 @@ class Poet:
         while (len(poem) < self.max_poem_length):
             next_word = self.predict_next_word(poem)
             print(next_word, end='')
-            poem = poem + next_word
-            print(poem)
+            poem = poem + " " + next_word
+            # print(poem)
         
         return poem 
 
