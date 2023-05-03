@@ -19,7 +19,7 @@ def get_data(file_name):
 
     with open(file_name, "r") as file:
         for line in file:
-            line = re.sub("[^\w\s]", "", line)
+            line = re.sub("[^\w\s]+", "", line) #added a plus
             tokens = line.split()
             train.extend(tokens) #no argument also means white space
             
@@ -27,7 +27,9 @@ def get_data(file_name):
                 if t not in vocab:
                     vocab[t] = vocab_size
                     vocab_size += 1
-    
+    vocab['UNK'] = vocab_size
+    vocab_size += 1
+
     train = list(map(lambda x: vocab[x], train))
     return train, vocab
 
