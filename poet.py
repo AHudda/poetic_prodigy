@@ -52,6 +52,8 @@ class Poet:
         # random_distribution = gumbel_softmax(lstm_output)
         #model.load_weights()
         self.generator = gen
+        print("Generator Loss: ", total_g)
+        print("Discriminator Loss: ", total_d)
         gen.save('saved_model/my_gen')
         dim.save('saved_model/my_dim')
         return gen
