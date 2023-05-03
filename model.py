@@ -33,7 +33,7 @@ def get_disc_model(units, optimizer):
         tf.keras.layers.Dense(units = 1, activation = 'sigmoid')
     ])
     model.compile(optimizer = optimizer, loss = d_loss)
-    print('returned model')
+    # print('returned model')
     
     return model
 
