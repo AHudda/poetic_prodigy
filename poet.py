@@ -33,7 +33,7 @@ class Poet:
             [existing_poem_seq], maxlen=self.max_poem_length, padding='post'
         )
         # gumbel + multinomial for training randomness 
-        gumbel_noise = self.generator.predict(existing_poem_seq) #self.generate()
+        gumbel_noise = self.generator.predict(existing_poem_seq) #predict, self.generate()
         gumbel_noise = gumbel_noise.ravel()
         gumbel_noise /= np.sum(gumbel_noise)
         random_sample = np.random.multinomial(self.n, gumbel_noise)
