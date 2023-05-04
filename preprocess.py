@@ -32,6 +32,3 @@ def get_data(file_name):
 
     train = list(map(lambda x: vocab[x], train))
     return train, vocab
-
-
-# get_data("data/Poetry.txt")

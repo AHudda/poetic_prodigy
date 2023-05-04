@@ -5,25 +5,25 @@ from training import train
 from preprocess import get_data
 import re
 
-EPOCHS = 1 #change to 1 to save time?
+EPOCHS = 2 
 
 class Poet:
 
     def __init__(self):
         self.train, self.vocab = get_data('data/SmallData.txt')
-        # self.vocab_dict = vocab_dict
         self.embed = 128
         self.hidden_unit = 512
         # self.model_path = './models/love-letter-generator-model.h5'
-        # wut
 
         self.max_poem_length = 100
-        self.n = 3 # n, for multinomial distribution (hyperparemter that represents num outcomes)
+        # n, for multinomial distribution (hyperparemter that represents num outcomes)
+        self.n = 3
 
-    def predict_next_word(self, existing_poem): #have to get rid of periods
+    def predict_next_word(self, existing_poem):
         existing_poem_seq = []
         for word in existing_poem.split():
             if word in self.vocab:
+                # remove punctuation and whitespace
                 w = re.sub("[^\w\s]+", "", word)
                 existing_poem_seq.append(self.vocab[w])
             else:
@@ -33,7 +33,7 @@ class Poet:
             [existing_poem_seq], maxlen=self.max_poem_length, padding='post'
         )
         # gumbel + multinomial for training randomness 
-        gumbel_noise = self.generator.predict(existing_poem_seq) #predict, self.generate()
+        gumbel_noise = self.generator.predict(existing_poem_seq)
         gumbel_noise = gumbel_noise.ravel()
         gumbel_noise /= np.sum(gumbel_noise)
         random_sample = np.random.multinomial(self.n, gumbel_noise)
@@ -46,17 +46,21 @@ class Poet:
         return next_word
     #minimize number of files.
     def generate(self):
+        total_g = 0
+        total_d = 0
         for epoch_id in range(EPOCHS):
-            total_g, total_d, gen, dim = train(self.train, self.vocab)
+            curr_g, curr_d, gen, dim = train(self.train, self.vocab)
+            total_g = total_g + curr_g
+            total_d = total_d + curr_d
+            print('Epoch ', epoch_id, ': generator loss: ', curr_g)
+            print('Epoch ', epoch_id, ': discriminator loss: ', curr_d)
         # lstm_output = get_gen_model(batch_sz=1, encoding_dimension=[len(self.vocab_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
         # random_distribution = gumbel_softmax(lstm_output)
-        #model.load_weights()
+        # model.load_weights()
         self.generator = gen
-        print("Generator Loss: ", total_g)
-        print("Discriminator Loss: ", total_d)
         gen.save('saved_model/my_gen')
         dim.save('saved_model/my_dim')
-        return gen
+        return gen, total_g, total_d
 
     def create_poem(self, name, characteristic): # take in characteristic -- how would it generate words based on it
         first_sentence = name + " is a very " + characteristic + " person."
@@ -65,11 +69,12 @@ class Poet:
             next_word = self.predict_next_word(poem)
             print(next_word, end='')
             poem = poem + " " + next_word
-            # print(poem)
-        
         return poem 
 
 poet = Poet()
-gen = poet.generate()
-poem = poet.create_poem("rabbit", "crazed")
+gen, total_g, total_d = poet.generate()
+poem = poet.create_poem("Tabitha", "clumsy")
 print(poem)
+# average loss per epoch, where loss is the average loss per batch
+print('Average G loss over all epoch: ', total_g/EPOCHS)
+print('Average D loss over all epoch: ', total_d/EPOCHS)
