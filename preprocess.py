@@ -15,7 +15,7 @@ def get_data(file_name):
     vocab_size = 0
 
     # ADDED IN TO SIMPLY FOR NOW
-    file_name = 'data/SmallData.txt'
+    file_name = 'data/SmallerData.txt'
 
     with open(file_name, "r") as file:
         for line in file:

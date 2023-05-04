@@ -5,12 +5,12 @@ from training import train
 from preprocess import get_data
 import re
 
-EPOCHS = 2 
+EPOCHS = 10 
 
 class Poet:
 
     def __init__(self):
-        self.train, self.vocab = get_data('data/SmallData.txt')
+        self.train, self.vocab = get_data('data/SmallerData.txt')
         self.embed = 128
         self.hidden_unit = 512
         # self.model_path = './models/love-letter-generator-model.h5'
