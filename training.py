@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 from model import get_gen_model, gumbel_softmax, get_disc_model, g_loss, d_loss, d_acc_fake, d_acc_real, g_acc
 
-EPOCHS = 1
 BATCH_SIZE = 30
 HIDDEN_UNIT = 512
 UNITS = 200
