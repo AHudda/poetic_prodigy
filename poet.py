@@ -5,7 +5,7 @@ from training import train
 from preprocess import get_data
 import re
 
-EPOCHS = 50 
+EPOCHS = 0 
 
 class Poet:
 
@@ -45,21 +45,24 @@ class Poet:
         
         return next_word
     #minimize number of files.
-    def generate(self):
+    def generate(self, load):
+        self.generator = None
         total_g = 0
         total_d = 0
-        for epoch_id in range(EPOCHS):
-            curr_g, curr_d, gen, dim = train(self.train, self.vocab)
-            total_g = total_g + curr_g
-            total_d = total_d + curr_d
-            print('Epoch ', epoch_id, ': generator loss: ', curr_g)
-            print('Epoch ', epoch_id, ': discriminator loss: ', curr_d)
-        # lstm_output = get_gen_model(batch_sz=1, encoding_dimension=[len(self.vocab_dict), self.embed], hidden_unit=self.hidden_unit, optimizer='adam')
-        # random_distribution = gumbel_softmax(lstm_output)
-        # model.load_weights()
-        self.generator = gen
-        gen.save('saved_model/my_gen')
-        dim.save('saved_model/my_dim')
+        if not load:
+            for epoch_id in range(EPOCHS):
+                curr_g, curr_d, gen, dim = train(self.train, self.vocab)
+                total_g = total_g + curr_g
+                total_d = total_d + curr_d
+                print('Epoch ', epoch_id, ': generator loss: ', curr_g)
+                print('Epoch ', epoch_id, ': discriminator loss: ', curr_d)
+    
+            self.generator = gen
+            gen.save('saved_model/my_gen')
+            dim.save('saved_model/my_dim')
+        else:
+            self.generator = tf.keras.models.load_model('saved_model/my_gen')
+            gen = self.generator
         return gen, total_g, total_d
 
     def create_poem(self, name, characteristic): # take in characteristic -- how would it generate words based on it
@@ -72,7 +75,7 @@ class Poet:
         return poem 
 
 poet = Poet()
-gen, total_g, total_d = poet.generate()
+gen, total_g, total_d = poet.generate(False)
 poem = poet.create_poem("Tabitha", "clumsy")
 print(poem)
 # average loss per epoch, where loss is the average loss per batch
