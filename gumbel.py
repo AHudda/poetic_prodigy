@@ -1,9 +1,12 @@
 from typing import Any, Dict, Optional, Tuple
 import tensorflow as tf
 
+
 #import nalp.utils.constants as c
 
+
 EPSILON = 1e-20
+
 
 def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
     """Samples a tensor from a Gumbel distribution.
@@ -13,12 +16,16 @@ def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
         (tf.Tensor): An input_shape tensor sampled from a Gumbel distribution.
     """
 
+
     uniform_dist = tf.random.uniform(input_shape, 0, 1)
     gumbel_dist = -1 * tf.math.log(
         -1 * tf.math.log(uniform_dist + EPSILON) + EPSILON
     )
 
+
     return gumbel_dist
+
+
 
 
 # class GumbelSoftmax(Layer):
@@ -28,15 +35,19 @@ def gumbel_distribution(input_shape: Tuple[int, ...]) -> tf.Tensor:
 #         Preprint arXiv:1611.01144 (2016).
 #     """
 
+
 #     def __init__(self, axis: Optional[int] = -1, **kwargs) -> None:
 #         """Initialization method.
 #         Args:
 #             axis: Axis to perform the softmax operation.
 #         """
 
+
 #         super(GumbelSoftmax, self).__init__(**kwargs)
 
+
 #         self.axis = axis
+
 
 def call(inputs: tf.Tensor, tau: float) -> Tuple[tf.Tensor, tf.Tensor]:
     """Method that holds vital information whenever this class is called.
@@ -47,12 +58,16 @@ def call(inputs: tf.Tensor, tau: float) -> Tuple[tf.Tensor, tf.Tensor]:
             (Tuple[tf.Tensor, tf.Tensor]): Gumbel-Softmax output and its argmax token.
     """
 
+
     x = inputs + gumbel_distribution(tf.shape(inputs))
     x = tf.nn.softmax(x / tau, -1)
 
+
     y = tf.stop_gradient(tf.argmax(x, -1, tf.int32))
 
+
     return x, y
+
 
 # def get_config(self) -> Dict[str, Any]:
 #     """Gets the configuration of the layer for further serialization.
@@ -60,7 +75,9 @@ def call(inputs: tf.Tensor, tau: float) -> Tuple[tf.Tensor, tf.Tensor]:
 #             (Dict[str, Any]): Configuration dictionary.
 #         """
 
+
 #         config = {"axis": self.axis}
 #         base_config = super(GumbelSoftmax, self).get_config()
+
 
 #         return dict(list(base_config.items()) + list(config.items()))
