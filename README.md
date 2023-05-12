@@ -1,5 +1,5 @@
 # Poetic Prodigy: Personalized Poetry Generator
-## Living Poets Society: Aanya Hudda (ahudda1), Katherine Mao (5kmao), Mason Zhang (mzhang150), Tabitha Lynn (tlynn1)
+### Living Poets Society: Aanya Hudda (ahudda1), Katherine Mao (5kmao), Mason Zhang (mzhang150), Tabitha Lynn (tlynn1)
 
 ### How to run:
 1. Clone the github repository
