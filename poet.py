@@ -5,7 +5,7 @@ from training import train
 from preprocess import get_data
 import re
 
-EPOCHS = 0 
+EPOCHS = 1 
 
 class Poet:
 
